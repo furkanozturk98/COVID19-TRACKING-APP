@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "551280788080",
+    "project_id": "covid19firebase-46e01",
+    "storage_bucket": "covid19firebase-46e01.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:551280788080:android:76034f9fc7db3c9ee86ab5",
+        "android_client_info": {
+          "package_name": "com.example.coronavirustracking"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "551280788080-gskosfcj32sd0h4r27nuovapep63lka8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHTARC2yFp421Om3YtiZEw0sUOp-qyZPI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "551280788080-gskosfcj32sd0h4r27nuovapep63lka8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
