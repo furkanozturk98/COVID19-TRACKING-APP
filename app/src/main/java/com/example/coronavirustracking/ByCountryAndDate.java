@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -13,9 +14,21 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.coronavirustracking.model.Country;
+import com.example.coronavirustracking.model.DailyCountryData;
+import com.example.coronavirustracking.service.ByCountryAndDateAPI;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ByCountryAndDate extends AppCompatActivity {
 
@@ -27,6 +40,8 @@ public class ByCountryAndDate extends AppCompatActivity {
     TextView selectedCountry, selectedStartDateText, selectedEndDateText;
     Calendar calendar;
     int year, month, dayOfMonth;
+
+    String countryName, startDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +73,8 @@ public class ByCountryAndDate extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (position != 0) {
                     selectedCountry.setText("Selected Country: "+countryNames.get(position));
+
+                    countryName = countryNames.get(position);
                 }
             }
 
@@ -79,6 +96,8 @@ public class ByCountryAndDate extends AppCompatActivity {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                         selectedStartDateText.setText("Start date: " + day + "/" + (month + 1) + "/" + year);
+
+                        startDate = year + "-" + (month + 1) + "-" + day;
                     }
                 }, year, month, dayOfMonth);
         datePickerDialog.show();
@@ -102,5 +121,62 @@ public class ByCountryAndDate extends AppCompatActivity {
     public void fetch(View view) {
         // hepsinin seçili olduğunuı kontrol et.
         //end date start date den önce olmamalı.
+
+        Gson gson = new GsonBuilder().setLenient().create();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://api.covid19api.com/")
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        ByCountryAndDateAPI byCountryAndDateAPI = retrofit.create(ByCountryAndDateAPI.class);
+        Call<List<DailyCountryData>> call = byCountryAndDateAPI.getGenericJSON(countryName,startDate);
+
+        call.enqueue(new Callback<List<DailyCountryData>>() {
+
+            @Override
+            public void onResponse(Call<List<DailyCountryData>> call, Response<List<DailyCountryData>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.e("TAG", "response 33: " + new Gson().toJson(response.body()));
+
+                    List<DailyCountryData> responseList = response.body();
+                    ArrayList<DailyCountryData> dailyCountryDataList = new ArrayList<>(responseList);
+
+                    for (DailyCountryData dailyCountryData : dailyCountryDataList){
+                        System.out.println(dailyCountryData.getDeaths());
+                    }
+
+
+                   /* try {
+                        JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
+
+                        String globalString = new Gson().toJson(jsonObject.getString("Global"));
+                        JSONObject global = new JSONObject(globalString.substring(globalString.indexOf("{"), globalString.lastIndexOf("}") + 1).replace("\\", ""));
+
+                        int NewConfirmed = Integer.parseInt(global.getString("NewConfirmed"));
+                        int TotalConfirmed = Integer.parseInt(global.getString("TotalConfirmed"));
+                        int NewDeaths = Integer.parseInt(global.getString("NewDeaths"));
+                        int TotalDeaths = Integer.parseInt(global.getString("TotalDeaths"));
+                        int NewRecovered = Integer.parseInt(global.getString("NewRecovered"));
+                        int TotalRecovered = Integer.parseInt(global.getString("TotalRecovered"));
+
+                        globalSummary = new GlobalSummary(NewConfirmed,TotalConfirmed,NewDeaths,TotalDeaths,NewRecovered,TotalRecovered);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }*/
+
+                } else {
+                    Log.e("TAG", "Error in getGenericJson:" + response.code() + " " + response.message());
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<List<DailyCountryData>> call, Throwable t) {
+                Log.e("TAG", t.toString());
+            }
+        });
+
     }
 }
