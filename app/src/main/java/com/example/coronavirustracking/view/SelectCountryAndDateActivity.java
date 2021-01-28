@@ -1,4 +1,4 @@
-package com.example.coronavirustracking;
+package com.example.coronavirustracking.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,6 +13,7 @@ import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.coronavirustracking.R;
 import com.example.coronavirustracking.model.Country;
 import com.example.coronavirustracking.model.DailyCountryData;
 import com.example.coronavirustracking.service.ByCountryAndDateAPI;
@@ -29,7 +30,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class ByCountryAndDate extends AppCompatActivity {
+public class SelectCountryAndDateActivity extends AppCompatActivity {
 
     ArrayList<Country> countries;
     ArrayList<String> countryNames = new ArrayList<>();
@@ -64,7 +65,7 @@ public class ByCountryAndDate extends AppCompatActivity {
 
         spinner = findViewById(R.id.spinner);
 
-        spinner.setAdapter(new ArrayAdapter<>(ByCountryAndDate.this,
+        spinner.setAdapter(new ArrayAdapter<>(SelectCountryAndDateActivity.this,
                 android.R.layout.simple_spinner_dropdown_item, countryNames));
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -90,7 +91,7 @@ public class ByCountryAndDate extends AppCompatActivity {
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
         dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-        datePickerDialog = new DatePickerDialog(ByCountryAndDate.this,
+        datePickerDialog = new DatePickerDialog(SelectCountryAndDateActivity.this,
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
@@ -107,7 +108,7 @@ public class ByCountryAndDate extends AppCompatActivity {
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
         dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-        datePickerDialog = new DatePickerDialog(ByCountryAndDate.this,
+        datePickerDialog = new DatePickerDialog(SelectCountryAndDateActivity.this,
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
@@ -145,7 +146,7 @@ public class ByCountryAndDate extends AppCompatActivity {
                         System.out.println(dailyCountryData.getDeaths());
                     }*/
 
-                    Intent intent = new Intent(ByCountryAndDate.this, DailyCountrySummaryActivity.class);
+                    Intent intent = new Intent(SelectCountryAndDateActivity.this, DailyCountrySummaryActivity.class);
                     intent.putExtra("data", dailyCountryDataList);
                     startActivity(intent);
 

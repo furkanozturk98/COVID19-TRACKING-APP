@@ -1,13 +1,13 @@
-package com.example.coronavirustracking;
+package com.example.coronavirustracking.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.example.coronavirustracking.R;
 import com.example.coronavirustracking.model.Country;
 import com.example.coronavirustracking.model.GlobalSummary;
 import com.example.coronavirustracking.service.CountryAPI;
@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void byCountryAndDateClick(View view) {
-        Intent intent = new Intent(MainActivity.this, ByCountryAndDate.class);
+        Intent intent = new Intent(MainActivity.this, SelectCountryAndDateActivity.class);
         intent.putExtra("countries", (Serializable) countries);
         startActivity(intent);
     }

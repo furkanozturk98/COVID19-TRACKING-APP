@@ -1,9 +1,8 @@
-package com.example.coronavirustracking;
+package com.example.coronavirustracking.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -15,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 
+import com.example.coronavirustracking.R;
 import com.example.coronavirustracking.adapter.DailyCountrySummaryAdapter;
 import com.example.coronavirustracking.model.DailyCountryData;
 

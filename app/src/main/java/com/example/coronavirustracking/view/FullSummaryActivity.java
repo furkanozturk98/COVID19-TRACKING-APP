@@ -1,4 +1,4 @@
-package com.example.coronavirustracking;
+package com.example.coronavirustracking.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.coronavirustracking.R;
 import com.example.coronavirustracking.model.GlobalSummary;
 
 public class FullSummaryActivity extends AppCompatActivity {
