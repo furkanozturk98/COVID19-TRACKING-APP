@@ -1,6 +1,8 @@
 package com.example.coronavirustracking.model;
 
-public class DailyCountryData {
+import java.io.Serializable;
+
+public class DailyCountryData implements Serializable {
     private String ID;
     private String Country;
     private String CountryCode;

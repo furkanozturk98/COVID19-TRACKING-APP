@@ -18,7 +18,6 @@ import com.example.coronavirustracking.model.DailyCountryData;
 import com.example.coronavirustracking.service.ByCountryAndDateAPI;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -142,29 +141,13 @@ public class ByCountryAndDate extends AppCompatActivity {
                     List<DailyCountryData> responseList = response.body();
                     ArrayList<DailyCountryData> dailyCountryDataList = new ArrayList<>(responseList);
 
-                    for (DailyCountryData dailyCountryData : dailyCountryDataList){
+                    /*for (DailyCountryData dailyCountryData : dailyCountryDataList){
                         System.out.println(dailyCountryData.getDeaths());
-                    }
-
-
-                   /* try {
-                        JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
-
-                        String globalString = new Gson().toJson(jsonObject.getString("Global"));
-                        JSONObject global = new JSONObject(globalString.substring(globalString.indexOf("{"), globalString.lastIndexOf("}") + 1).replace("\\", ""));
-
-                        int NewConfirmed = Integer.parseInt(global.getString("NewConfirmed"));
-                        int TotalConfirmed = Integer.parseInt(global.getString("TotalConfirmed"));
-                        int NewDeaths = Integer.parseInt(global.getString("NewDeaths"));
-                        int TotalDeaths = Integer.parseInt(global.getString("TotalDeaths"));
-                        int NewRecovered = Integer.parseInt(global.getString("NewRecovered"));
-                        int TotalRecovered = Integer.parseInt(global.getString("TotalRecovered"));
-
-                        globalSummary = new GlobalSummary(NewConfirmed,TotalConfirmed,NewDeaths,TotalDeaths,NewRecovered,TotalRecovered);
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     }*/
+
+                    Intent intent = new Intent(ByCountryAndDate.this, DailyCountrySummaryActivity.class);
+                    intent.putExtra("data", dailyCountryDataList);
+                    startActivity(intent);
 
                 } else {
                     Log.e("TAG", "Error in getGenericJson:" + response.code() + " " + response.message());
