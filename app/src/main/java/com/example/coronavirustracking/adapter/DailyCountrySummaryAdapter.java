@@ -7,11 +7,9 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.coronavirustracking.FilterStat;
+import com.example.coronavirustracking.FilterSummaryByCountry;
 import com.example.coronavirustracking.R;
 import com.example.coronavirustracking.model.DailyCountryData;
 
@@ -21,7 +19,7 @@ public class DailyCountrySummaryAdapter extends RecyclerView.Adapter<DailyCountr
 
     private Context context;
     public ArrayList<DailyCountryData> dailyCountryDataList, filterList;
-    private FilterStat filter;
+    private FilterSummaryByCountry filter;
 
     public DailyCountrySummaryAdapter(Context context, ArrayList<DailyCountryData> dailyCountryDataList) {
         this.context = context;
@@ -31,7 +29,7 @@ public class DailyCountrySummaryAdapter extends RecyclerView.Adapter<DailyCountr
     @NonNull
     @Override
     public HolderStat onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.row_stat, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.row_daily_country_summary, parent, false);
 
         return new HolderStat(view);
     }
@@ -63,9 +61,9 @@ public class DailyCountrySummaryAdapter extends RecyclerView.Adapter<DailyCountr
 
     @Override
     public Filter getFilter() {
-        if(filter != null){
-            filter = new FilterStat(this, filterList);
-        }
+       /* if(filter != null){
+            filter = new FilterDailyCountrySummary(this, filterList);
+        }*/
         return null;
     }
 

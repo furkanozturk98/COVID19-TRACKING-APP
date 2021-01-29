@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.DailyCountrySummaryActivity"></activity>
+        <activity android:name=".SummaryByCountryActivity"></activity>
+        <activity android:name=".view.DailyCountrySummaryActivity" />
         <activity android:name=".view.SelectCountryAndDateActivity" />
         <activity android:name=".view.FullSummaryActivity" />
         <activity android:name=".view.RegisterActivity" />

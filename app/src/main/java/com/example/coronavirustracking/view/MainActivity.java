@@ -8,8 +8,10 @@ import android.util.Log;
 import android.view.View;
 
 import com.example.coronavirustracking.R;
+import com.example.coronavirustracking.SummaryByCountryActivity;
 import com.example.coronavirustracking.model.Country;
 import com.example.coronavirustracking.model.GlobalSummary;
+import com.example.coronavirustracking.model.SummaryByCountry;
 import com.example.coronavirustracking.service.CountryAPI;
 import com.example.coronavirustracking.service.GlobalSummaryAPI;
 import com.google.firebase.auth.FirebaseAuth;
@@ -17,6 +19,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -35,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     GlobalSummary globalSummary;
     ArrayList<Country> countries;
+    ArrayList<SummaryByCountry> summaryByCountries = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +88,32 @@ public class MainActivity extends AppCompatActivity {
                         int TotalRecovered = Integer.parseInt(global.getString("TotalRecovered"));
 
                         globalSummary = new GlobalSummary(NewConfirmed,TotalConfirmed,NewDeaths,TotalDeaths,NewRecovered,TotalRecovered);
+
+                        JSONArray jsonArray = jsonObject.getJSONArray("Countries");
+                        GsonBuilder gsonBuilder = new GsonBuilder();
+                        gsonBuilder.setDateFormat("dd/MM/yyy hh:mm a");
+                        Gson gson = gsonBuilder.create();
+
+                        for (int i = 0; i < jsonArray.length(); i++){
+                            String summaryByCountryString = jsonArray.getJSONObject(i).toString();
+
+                            JSONObject summaryByCountryObject = new JSONObject(summaryByCountryString.substring(summaryByCountryString.indexOf("{"), summaryByCountryString.lastIndexOf("}") + 1).replace("\\", ""));
+
+                            SummaryByCountry summaryByCountry = new SummaryByCountry(
+                                    summaryByCountryObject.getString("Country"),
+                                    summaryByCountryObject.getString("CountryCode"),
+                                    summaryByCountryObject.getString("Slug"),
+                                    summaryByCountryObject.getString("NewConfirmed"),
+                                    summaryByCountryObject.getString("TotalConfirmed"),
+                                    summaryByCountryObject.getString("NewDeaths"),
+                                    summaryByCountryObject.getString("TotalDeaths"),
+                                    summaryByCountryObject.getString("NewRecovered"),
+                                    summaryByCountryObject.getString("TotalRecovered"),
+                                    summaryByCountryObject.getString("Date")
+                            );
+                            summaryByCountries.add(summaryByCountry);
+
+                        }
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -157,8 +187,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void fromDayOneClick(View view) {
-
+    public void summaryByCountryClick(View view) {
+        Intent intent = new Intent(MainActivity.this, SummaryByCountryActivity.class);
+        intent.putExtra("summaryByCountries", (Serializable) summaryByCountries);
+        startActivity(intent);
     }
 
     public void logOutClick(View view) {
