@@ -2,6 +2,10 @@ package com.example.coronavirustracking.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,9 +41,10 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
     GlobalSummary globalSummary;
+    SummaryByCountry turkey;
     ArrayList<Country> countries;
     ArrayList<SummaryByCountry> summaryByCountries = new ArrayList<>();
-
+    NotificationManager manager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,18 +52,27 @@ public class MainActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
 
-
         LoadSummary loadSummary = new LoadSummary();
         LoadCategories loadCategories = new LoadCategories();
 
         loadSummary.start();
         loadCategories.start();
 
+
+        String CHANNEL_ID = "turkey";
+        String CHANNEL_NAME = "turkey covid19 summary";
+        NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
+                CHANNEL_NAME, NotificationManager.IMPORTANCE_LOW);
+        manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.createNotificationChannel(channel);
+
     }
 
     public void loadSummary() {
-        Gson gson = new GsonBuilder().setLenient().create();
 
+
+
+        Gson gson = new GsonBuilder().setLenient().create();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.covid19api.com/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
@@ -111,6 +125,10 @@ public class MainActivity extends AppCompatActivity {
                                     summaryByCountryObject.getString("TotalRecovered"),
                                     summaryByCountryObject.getString("Date")
                             );
+
+                            if(summaryByCountry.getCountryCode().contains("TR")){
+                                turkey = summaryByCountry;
+                            }
                             summaryByCountries.add(summaryByCountry);
 
                         }
@@ -123,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.e("TAG", "Error in getGenericJson:" + response.code() + " " + response.message());
                 }
 
+                notifySummaryOfTurkey();
             }
 
             @Override
@@ -172,6 +191,23 @@ public class MainActivity extends AppCompatActivity {
         public void run() {
             loadCategories();
         }
+    }
+
+
+    public void notifySummaryOfTurkey(){
+
+
+        String content = "New deaths: "+ turkey.getNewDeaths()+
+                System.getProperty("line.separator") +"New Confirmed: "+turkey.getNewConfirmed()+
+                System.getProperty("line.separator") +"New Recovered: " +turkey.getNewRecovered();
+
+        Notification notification = new Notification.Builder(this, "turkey")
+                .setContentTitle("Turkey " + turkey.getDate().split("T")[0] + " covid19 summary" )
+                .setContentText(content)
+                .setSmallIcon(R.drawable.shape_circle1)
+                .setAutoCancel(true)
+                .build();
+        manager.notify(52, notification);
     }
 
 
