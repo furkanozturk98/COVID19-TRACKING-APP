@@ -56,7 +56,7 @@
         android:layout_height="56dp"
         android:background="@android:color/holo_red_light"
         android:onClick="fetch"
-        android:text="Fetch"
+        android:text="SHOW"
         android:textColor="@android:color/background_light"
         android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
